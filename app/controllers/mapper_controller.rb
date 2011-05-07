@@ -38,9 +38,9 @@ respond_to :html, :only => :index
 
 		# get more json if station is at LINE intersect
 		info2 = intersect_station?(info_array) # returns db entry of second line if station is intersection
-		puts info2.line
 		if (!info2.blank?) 
-			puts "not blank"
+			puts "2nd line: "
+			puts info2.line
 			json2 = getjson(info2.line, pkey_base, info2)
 			@json = json1 +  json2
 		else

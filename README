@@ -2,7 +2,7 @@ Heroku URL:
 http://comp120a3.heroku.com
 
 NOTES: ~ unable to add all stations to map at this time. using cartographer. looking into it.
-		~ comp120a3.heroku.com is not displaying the mapper/index content, but rather an error. From the nature of the error, I believe it's on Heroku's end. Will try again soon
+		~ comp120a3.heroku.com is not displaying the mapper/index content, but rather an error. THIS IS RELATED TO CARTOGRAPHER. not sure what to do
 
 
 
@@ -10,15 +10,28 @@ NOTES: ~ unable to add all stations to map at this time. using cartographer. loo
 
 TO REPLICATE:
 
+configure the config/database.yml file to correspond with your db!
+
 Station model:
     rails generate model Station line:string platform_key:string platform_name:string station_name:string platform_order:integer startofline:boolean endofline:boolean branch:string direction:string stop_id:string stop_code:string stop_name:string stop_desc:string stop_lat:decimal stop_lng:decimal
+- run   rake db:migrate
 - then change the precision, scale in db/schema.rb AND in db/migrate/..._create_stations.rb:     :precision => 8, :scale => 6
+- run   rake db:rollback   THEN   rake db:migrate   AGAIN
+- then:   move csv to lib/   AND   update db/seeds.rb: 
+		seeds.rb: 
+			require 'csv'
+			Station.delete_all # start fresh with empty db
+			CSV.foreach "lib/mbta_data.csv" do |row|
+    				Station.create(:line => row[0], :platform_key => row[1], :platform_name => row[2], :station_name => row[3], :platform_order => row[4], :startofline => row[5], :endofline => row[6], :branch => row[7], :direction => row[8], :stop_id => row[9], :stop_code => row[10], :stop_name => row[11], :stop_desc => row[12], :stop_lat => row[13], :stop_lng => row[14])
+			end
+- run:   rake db:seed
 
 Mapper controller:
     rails generate controller Mapper station find_closest_stations station_schedule index
 
 Cartographer:
-    rails plugin install git://github.com/joshuamiller/cartographer.git
+    run:   rails plugin install git://github.com/joshuamiller/cartographer.git
+    add as first line to config/environment.rb:     CARTOGRAPHER_GMAP_VERSION = 3
 
 added to Gemfile:
 	(make sure correct db gem is there also)
@@ -26,9 +39,11 @@ added to Gemfile:
     gem 'geokit-rails3'
 - then run:    bundle install
 
-add as first line to config/environment.rb:     CARTOGRAPHER_GMAP_VERSION = 3
+update all app/ files from TUFTS CS folder
+update the config/routes.rb file
+move mbta image to public/images/
 
-configure the config/database.yml file to correspond with your db!
+REMOVE public/index.html
 
 Create GIT repo & git init a local, and push
 
