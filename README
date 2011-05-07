@@ -1,16 +1,9 @@
-Heroku JSON URL:    http://json120a3.heroku.com
-
-I CREATED AN APP JUST FOR THE JSON B/C THERE WERE ISSUES WITH CARTOGRAPHER AND HEROKU
-json120a3.heroku.com INDEX PAGE RENDERS, but with no map
-
 Heroku URL:
 http://comp120a3.heroku.com
 
 NOTES: ~ unable to add all stations to map at this time. using cartographer. looking into it.
-		~ comp120a3.heroku.com is not displaying the mapper/index content, but rather an error. THIS IS RELATED TO CARTOGRAPHER. not sure what to do
-
-
-
+tried:     1. adding them to @map.markers as soon as created, within station loop
+		2. adding them to an array of markers within station loop, then adding to @map.markers in a second loop
 
 
 TO REPLICATE:
