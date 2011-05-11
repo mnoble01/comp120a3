@@ -21,6 +21,7 @@ respond_to :html, :only => :index
 	@stations.each do |s| # calc distance
 		s['distance'] = s.distance_from(userLoc, :units => :miles)
 	end
+	@stations.sort! { |a, b| a.distance <=> b.distance }
 	puts "num stations found: " + @stations.size.to_s
 	render :json => @stations.to_json
 	#render :json => Station.find_all_by_stop_lat_and_stop_lng(params[:lat], params[:lng]).to_json #works
